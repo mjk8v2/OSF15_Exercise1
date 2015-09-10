@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <time.h>
 
-#include<readline/readline.h>
+#include <readline/readline.h>
 
 #include "command.h"
 #include "matrix.h"

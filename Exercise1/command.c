@@ -9,10 +9,18 @@
 #define MAX_CMD_LEN 25
 
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS:
+  * OUTPUTS:
+**********/
 bool parse_user_input (const char* input, Commands_t** cmd) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
+	if( !input || !cmd) {
+		return false;
+	}
 
 	char *string = strdup(input);
 	
@@ -36,11 +44,19 @@ bool parse_user_input (const char* input, Commands_t** cmd) {
 	return true;
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS:
+  * OUTPUTS:
+**********/
 void destroy_commands(Commands_t** cmd) {
 
 	//TODO ERROR CHECK INCOMING PARAMETERS
-	
+	if(!cmd) {
+		return;
+	}
+
 	for (int i = 0; i < (*cmd)->num_cmds; ++i) {
 		free((*cmd)->cmds[i]);
 	}

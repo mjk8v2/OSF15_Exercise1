@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h> // isdigit()
 
 #include <fcntl.h>
 #include <sys/types.h>
@@ -33,7 +34,10 @@ void load_matrix (Matrix_t* m, unsigned int* data);
 bool create_matrix (Matrix_t** new_matrix, const char* name, const unsigned int rows,
 						const unsigned int cols) {
 
-	//TODO ERROR CHECK INCOMING PARAMETERS
+	//TODO ERROR CHECK INCOMING PARAMETERS*
+	if( !new_matrix || !(*(new_matrix)) ||  !name || isdigit(rows) || isdigit(cols)){
+	   return false;
+	}	   
 
 	*new_matrix = calloc(1,sizeof(Matrix_t));
 	if (!(*new_matrix)) {
@@ -54,24 +58,33 @@ bool create_matrix (Matrix_t** new_matrix, const char* name, const unsigned int 
 
 }
 
-	//TODO FUNCTION COMMENT
-
+//TODO FUNCTION COMMENT
+/*********
+ * PURPOSE: To Deallocate memory used for matrix
+ * INPUTS: matrix double pointer 
+ * OUTPUTS: no return value; Funct. will jst return control to  
+*********/
 void destroy_matrix (Matrix_t** m) {
 
-	//TODO ERROR CHECK INCOMING PARAMETERS
-	
+	//TODO ERROR CHECK INCOMING PARAMETERS*
+	if( !m ) {
+		return;
+	}
+
 	free((*m)->data);
 	free(*m);
-	*m = NULL;
+	*m = NULL; //Interesting
 }
 
-
-	
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS:
+  * RETURN: 
+*********/
 bool equal_matrices (Matrix_t* a, Matrix_t* b) {
 
-	//TODO ERROR CHECK INCOMING PARAMETERS
-	
+	//TODO ERROR CHECK INCOMING PARAMETERS*
 	if (!a || !b || !a->data || !b->data) {
 		return false;	
 	}
@@ -83,15 +96,23 @@ bool equal_matrices (Matrix_t* a, Matrix_t* b) {
 	return false;
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+ * PURPOSE:
+ * INPUTS:
+ * RETURN: 
+*********/
 bool duplicate_matrix (Matrix_t* src, Matrix_t* dest) {
 
 
-	//TODO ERROR CHECK INCOMING PARAMETERS
-
-	if (!src) {
+	//TODO ERROR CHECK INCOMING PARAMETERS*
+	if( !src || !dest || !(src->data) || !(dest->data) ) {
 		return false;
 	}
+	/*if (!src) {
+		return false;
+	} Redunant due to code above...Keep it DRY */
+
 	/*
 	 * copy over data
 	 */
@@ -100,11 +121,16 @@ bool duplicate_matrix (Matrix_t* src, Matrix_t* dest) {
 	return equal_matrices (src,dest);
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS: 
+  * OUTPUTS:
+*********/
 bool bitwise_shift_matrix (Matrix_t* a, char direction, unsigned int shift) {
 	
-	//TODO ERROR CHECK INCOMING PARAMETERS
-	if (!a) {
+	//TODO ERROR CHECK INCOMING PARAMETERS*
+	if ( !a || !direction || isdigit(shift)) {  /*Check to see what isdigit() returns */
 		return false;
 	}
 
@@ -131,10 +157,18 @@ bool bitwise_shift_matrix (Matrix_t* a, char direction, unsigned int shift) {
 	return true;
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS:
+  * OUTPUTS:
+**********/
 bool add_matrices (Matrix_t* a, Matrix_t* b, Matrix_t* c) {
 
-	//TODO ERROR CHECK INCOMING PARAMETERS
+	//TODO ERROR CHECK INCOMING PARAMETERS*
+	if( !a || !(a->data) || !b || !(b->data) || !c || !(c->data) ) {
+		return false;
+	}
 
 	if (a->rows != b->rows && a->cols != b->cols) {
 		return false;
@@ -148,11 +182,18 @@ bool add_matrices (Matrix_t* a, Matrix_t* b, Matrix_t* c) {
 	return true;
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS:
+  * OUTPUTS:
+**********/
 void display_matrix (Matrix_t* m) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
-
+	if( !m || !(m->data) ) {
+		return;
+	}
 
 	printf("\nMatrix Contents (%s):\n", m->name);
 	printf("DIM = (%u,%u)\n", m->rows, m->cols);
@@ -166,11 +207,18 @@ void display_matrix (Matrix_t* m) {
 
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS:
+  * OUTPUTS:
+**********/
 bool read_matrix (const char* matrix_input_filename, Matrix_t** m) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
-
+	if(!m || !matrix_input_filename ) {
+		return false;
+	}
 
 	int fd = open(matrix_input_filename,O_RDONLY);
 	if (fd < 0) {
@@ -299,11 +347,18 @@ bool read_matrix (const char* matrix_input_filename, Matrix_t** m) {
 	return true;
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS:
+  * OUTPUTS:
+**********/
 bool write_matrix (const char* matrix_output_filename, Matrix_t* m) {
 	
-	//TODO ERROR CHECK INCOMING PARAMETERS
-
+	//TODO ERROR CHECK INCOMING PARAMETERS*
+	if(!matrix_output_filename || !m) {
+		return false;
+	}
 	int fd = open (matrix_output_filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	/* ERROR HANDLING USING errorno*/
 	if (fd < 0) {
@@ -367,11 +422,18 @@ bool write_matrix (const char* matrix_output_filename, Matrix_t* m) {
 	return true;
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+ * PURPOSE:
+ * INPUTS:
+ * OUTPUTS:
+**********/
 bool random_matrix(Matrix_t* m, unsigned int start_range, unsigned int end_range) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
-
+	if( !m || isdigit(start_range) || isdigit(end_range) ) {
+		return false;
+	}
 	for (unsigned int i = 0; i < m->rows; ++i) {
 		for (unsigned int j = 0; j < m->cols; ++j) {
 			m->data[i * m->cols + j] = rand() % end_range + start_range;
@@ -382,17 +444,33 @@ bool random_matrix(Matrix_t* m, unsigned int start_range, unsigned int end_range
 
 /*Protected Functions in C*/
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE: 
+  * INPUTS:
+  * OUTPUTS:
+**********/
 void load_matrix (Matrix_t* m, unsigned int* data) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
+	if( !m || !data) {
+		return;
+	}
 	memcpy(m->data,data,m->rows * m->cols * sizeof(unsigned int));
 }
 
-	//TODO FUNCTION COMMENT
+//TODO FUNCTION COMMENT
+/*********
+  * PURPOSE:
+  * INPUTS:
+  * OUTPUTS:
+**********/
 unsigned int add_matrix_to_array (Matrix_t** mats, Matrix_t* new_matrix, unsigned int num_mats) {
 	
 	//TODO ERROR CHECK INCOMING PARAMETERS
+	if( !mats || !new_matrix || isdigit(num_mats) )
+		return -1;
+
 	static long int current_position = 0;
 	const long int pos = current_position % num_mats;
 	if ( mats[pos] ) {
