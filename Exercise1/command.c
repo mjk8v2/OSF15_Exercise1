@@ -11,9 +11,9 @@
 
 //TODO FUNCTION COMMENT
 /*********
-  * PURPOSE:
-  * INPUTS:
-  * OUTPUTS:
+  * PURPOSE: To parse input from user; to exclude bad input
+  * INPUTS: input from the user; and cmd to save the history of commands
+  * OUTPUT: validity of the function
 **********/
 bool parse_user_input (const char* input, Commands_t** cmd) {
 	
@@ -46,9 +46,9 @@ bool parse_user_input (const char* input, Commands_t** cmd) {
 
 //TODO FUNCTION COMMENT
 /*********
-  * PURPOSE:
-  * INPUTS:
-  * OUTPUTS:
+  * PURPOSE: To deallocate memory used by commands
+  * INPUTS: cmd root of all the commands history
+  * OUTPUT: None , but will return control back to the calling function if error occurs
 **********/
 void destroy_commands(Commands_t** cmd) {
 
